@@ -9,7 +9,13 @@ public final class SM2Scheduler {
 
     private SM2Scheduler() {} // static-only utility class
 
+    // Version 1: used by your CLI and GUI.
     public static LeetCodeCard review(LeetCodeCard card, int quality) {
+        return review(card, quality, LocalDate.now());
+    }
+
+    // Version 2: takes the date as a parameter. Tests use this one.
+    public static LeetCodeCard review(LeetCodeCard card, int quality, LocalDate today) {
         if (quality < 0 || quality > 5) {
             throw new IllegalArgumentException("quality must be between 0 and 5, got " + quality);
         }
@@ -42,10 +48,9 @@ public final class SM2Scheduler {
         card.setEasinessFactor(newEf);
         card.setRepetitions(repetitions);
         card.setIntervalDays(interval);
-        card.setLastReviewed(LocalDate.now());
-        card.setDueDate(LocalDate.now().plusDays(interval));
+        card.setLastReviewed(today);
+        card.setDueDate(today.plusDays(interval));
 
         return card;
     }
 }
-

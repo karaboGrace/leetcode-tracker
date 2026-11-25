@@ -37,8 +37,8 @@ public class LeetCodeCard {
     public double getEasinessFactor() {
         return easinessFactor; }
 
-    public void setEasinessFactor(double ef) {
-        this.easinessFactor = 2.5;
+    public void setEasinessFactor(double easinessFactor) {
+        this.easinessFactor = easinessFactor;
     }
 
     public String getTitle() {
