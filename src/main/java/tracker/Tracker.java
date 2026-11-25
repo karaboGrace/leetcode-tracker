@@ -32,6 +32,9 @@ public class Tracker {
             case "list":
                 handleList(cards);
                 break;
+            case "delete":
+                handleDelete(cards, args, store);
+                break;
             default:
                 System.out.println("Unknown command: " + command);
         }
@@ -69,6 +72,21 @@ public class Tracker {
         store.save(cards);
 
         System.out.println("Reviewed: " + card);
+    }
+
+    private static void handleDelete(List<LeetCodeCard> cards, String[] args, CardStore store) {
+        if (args.length < 2) {
+            System.out.println("Usage: delete <id>");
+            return;
+        }
+        int id = Integer.parseInt(args[1]);
+        boolean removed = cards.removeIf(c -> c.getId() == id);
+        if (!removed) {
+            System.out.println("No card with id " + id);
+            return;
+        }
+        store.save(cards);
+        System.out.println("Deleted card " + id);
     }
 
     private static void handleDue(List<LeetCodeCard> cards) {

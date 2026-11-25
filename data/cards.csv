@@ -1,2 +1,2 @@
 id,title,url,difficulty,tags,easinessFactor,repetitions,intervalDays,dueDate,lastReviewed
-1,Two Sum,https://leetcode.com/problems/two-sum,EASY,,2.5,1,1,2026-09-20,2026-09-19
+1,Contains Duplicate,https://leetcode.com/problems/contains-duplicate/description/,EASY,hash maps ; arrays,2.5,1,1,2026-09-24,2026-09-23
