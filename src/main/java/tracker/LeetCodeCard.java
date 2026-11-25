@@ -1,7 +1,9 @@
 package tracker;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class LeetCodeCard {
 
@@ -22,7 +24,7 @@ public class LeetCodeCard {
         this.title = title;
         this.url = url;
         this.difficulty = difficulty;
-        this.tags = tags;
+        this.tags = new ArrayList<>(tags);
         this.easinessFactor = 2.5;
         this.repetitions = 0;
         this.intervalDays = 0;
@@ -66,11 +68,11 @@ public class LeetCodeCard {
     }
 
     public List<String> getTags() {
-        return tags;
+        return List.copyOf(tags);
     }
 
     public void setTags(List<String> tags) {
-        this.tags = tags;
+        this.tags = new ArrayList<>(tags);
     }
 
     public int getRepetitions() {
@@ -111,7 +113,7 @@ public class LeetCodeCard {
 
     @Override
     public String toString() {
-        return String.format("[%d] %-35s %-6s EF=%.2f reps=%d due=%s",
+        return String.format(Locale.US, "[%d] %-35s %-6s EF=%.2f reps=%d due=%s",
                 id, title, difficulty, easinessFactor, repetitions, dueDate);
     }
 
@@ -122,7 +124,7 @@ public class LeetCodeCard {
         this.title = title;
         this.url = url;
         this.difficulty = difficulty;
-        this.tags = tags;
+        this.tags = new ArrayList<>(tags);
         this.easinessFactor = easinessFactor;
         this.repetitions = repetitions;
         this.intervalDays = intervalDays;
