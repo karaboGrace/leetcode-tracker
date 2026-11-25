@@ -9,9 +9,8 @@ public class SM2SchedulerTest {
     private static final LocalDate TODAY = LocalDate.of(2026, 1, 10);
 
     private LeetCodeCard newCard() {
-        // adjust to your real constructor
-        return new LeetCodeCard(1, "Two Sum", "https://leetcode.com/problems/two-sum/",
-                Difficulty.EASY, java.util.List.of("array", "hash-map"));
+        return new LeetCodeCard("Two Sum", "https://leetcode.com/problems/two-sum/",
+                Difficulty.EASY, java.util.Set.of("array", "hash-map"));
     }
 
     @Test
