@@ -43,6 +43,8 @@ public class LeetCodeCard {
     private int intervalDays;
     private LocalDate dueDate;
     private LocalDate lastReviewed;
+    @Column(name = "user_id")
+    private Long userId;
 
     // Required by JPA: Hibernate uses it to create objects when loading rows.
     protected LeetCodeCard() {
@@ -135,6 +137,14 @@ public class LeetCodeCard {
 
     public void setLastReviewed(LocalDate lastReviewed) {
         this.lastReviewed = lastReviewed;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
     public boolean isDue() {

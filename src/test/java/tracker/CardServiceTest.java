@@ -18,6 +18,8 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class CardServiceTest {
 
+    private static final Long USER = 7L;
+
     @Mock
     private CardRepository repository;
 
@@ -30,17 +32,17 @@ class CardServiceTest {
     }
 
     @Test
-    void createSavesCardWithDefaultSchedulingState() {
+    void createSavesCardForTheUserWithDefaultSchedulingState() {
         when(repository.save(any(LeetCodeCard.class))).thenAnswer(inv -> inv.getArgument(0));
         CreateCardRequest request = new CreateCardRequest(
                 "Two Sum", "https://leetcode.com/problems/two-sum/", Difficulty.EASY, Set.of("array"));
 
-        LeetCodeCard saved = service.create(request);
+        LeetCodeCard saved = service.create(USER, request);
 
         assertEquals("Two Sum", saved.getTitle());
+        assertEquals(USER, saved.getUserId());
         assertEquals(2.5, saved.getEasinessFactor(), 1e-9);
         assertEquals(0, saved.getRepetitions());
-        verify(repository).save(any(LeetCodeCard.class));
     }
 
     @Test
@@ -49,17 +51,16 @@ class CardServiceTest {
         CreateCardRequest request = new CreateCardRequest(
                 "Two Sum", "https://leetcode.com/problems/two-sum/", Difficulty.EASY, null);
 
-        LeetCodeCard saved = service.create(request);
+        LeetCodeCard saved = service.create(USER, request);
 
         assertTrue(saved.getTags().isEmpty());
     }
 
     @Test
     void reviewAppliesTheScheduler() {
-        LeetCodeCard card = newCard();
-        when(repository.findById(1L)).thenReturn(Optional.of(card));
+        when(repository.findByIdAndUserId(1L, USER)).thenReturn(Optional.of(newCard()));
 
-        LeetCodeCard result = service.review(1L, 5);
+        LeetCodeCard result = service.review(USER, 1L, 5);
 
         assertEquals(1, result.getRepetitions());
         assertEquals(1, result.getIntervalDays());
@@ -68,16 +69,23 @@ class CardServiceTest {
 
     @Test
     void reviewOfUnknownCardThrowsNotFound() {
-        when(repository.findById(99L)).thenReturn(Optional.empty());
+        when(repository.findByIdAndUserId(99L, USER)).thenReturn(Optional.empty());
 
-        assertThrows(CardNotFoundException.class, () -> service.review(99L, 5));
+        assertThrows(CardNotFoundException.class, () -> service.review(USER, 99L, 5));
+    }
+
+    @Test
+    void anotherUsersCardIsTreatedAsNotFound() {
+        when(repository.findByIdAndUserId(1L, 8L)).thenReturn(Optional.empty());
+
+        assertThrows(CardNotFoundException.class, () -> service.get(8L, 1L));
     }
 
     @Test
     void deleteOfUnknownCardThrowsAndDeletesNothing() {
-        when(repository.existsById(99L)).thenReturn(false);
+        when(repository.existsByIdAndUserId(99L, USER)).thenReturn(false);
 
-        assertThrows(CardNotFoundException.class, () -> service.delete(99L));
+        assertThrows(CardNotFoundException.class, () -> service.delete(USER, 99L));
         verify(repository, never()).deleteById(any());
     }
 }

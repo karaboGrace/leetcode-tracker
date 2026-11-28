@@ -14,4 +14,18 @@ public class GlobalExceptionHandler {
         problem.setTitle("Card not found");
         return problem;
     }
+
+    @ExceptionHandler(EmailAlreadyUsedException.class)
+    public ProblemDetail handleEmailTaken(EmailAlreadyUsedException ex) {
+        ProblemDetail problem = ProblemDetail.forStatusAndDetail(HttpStatus.CONFLICT, ex.getMessage());
+        problem.setTitle("Email already registered");
+        return problem;
+    }
+
+    @ExceptionHandler(InvalidCredentialsException.class)
+    public ProblemDetail handleBadCredentials(InvalidCredentialsException ex) {
+        ProblemDetail problem = ProblemDetail.forStatusAndDetail(HttpStatus.UNAUTHORIZED, ex.getMessage());
+        problem.setTitle("Login failed");
+        return problem;
+    }
 }

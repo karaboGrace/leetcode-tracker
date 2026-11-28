@@ -17,34 +17,37 @@ public class CardService {
     }
 
     @Transactional
-    public LeetCodeCard create(CreateCardRequest request) {
+    public LeetCodeCard create(Long userId, CreateCardRequest request) {
         Set<String> tags = request.tags() == null ? Set.of() : request.tags();
-        return repository.save(new LeetCodeCard(
-                request.title(), request.url(), request.difficulty(), tags));
+        LeetCodeCard card = new LeetCodeCard(
+                request.title(), request.url(), request.difficulty(), tags);
+        card.setUserId(userId);
+        return repository.save(card);
     }
 
     @Transactional(readOnly = true)
-    public List<LeetCodeCard> list(boolean dueOnly) {
+    public List<LeetCodeCard> list(Long userId, boolean dueOnly) {
         if (dueOnly) {
-            return repository.findByDueDateLessThanEqualOrderByDueDateAsc(LocalDate.now());
+            return repository.findByUserIdAndDueDateLessThanEqualOrderByDueDateAsc(userId, LocalDate.now());
         }
-        return repository.findAll();
+        return repository.findByUserId(userId);
     }
 
+    // Another user's card is reported as "not found", so its existence isn't revealed.
     @Transactional(readOnly = true)
-    public LeetCodeCard get(Long id) {
-        return repository.findById(id).orElseThrow(() -> new CardNotFoundException(id));
+    public LeetCodeCard get(Long userId, Long id) {
+        return repository.findByIdAndUserId(id, userId).orElseThrow(() -> new CardNotFoundException(id));
     }
 
     @Transactional
-    public LeetCodeCard review(Long id, int quality) {
-        LeetCodeCard card = get(id);
+    public LeetCodeCard review(Long userId, Long id, int quality) {
+        LeetCodeCard card = get(userId, id);
         return SM2Scheduler.review(card, quality);
     }
 
     @Transactional
-    public void delete(Long id) {
-        if (!repository.existsById(id)) {
+    public void delete(Long userId, Long id) {
+        if (!repository.existsByIdAndUserId(id, userId)) {
             throw new CardNotFoundException(id);
         }
         repository.deleteById(id);

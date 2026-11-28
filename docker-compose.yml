@@ -5,6 +5,7 @@ services:
       POSTGRES_USER: tracker
       POSTGRES_PASSWORD: ${DB_PASSWORD}
       POSTGRES_DB: tracker
+
     volumes:
       - compose_pgdata:/var/lib/postgresql/data
     healthcheck:
@@ -23,6 +24,7 @@ services:
       SPRING_DATASOURCE_USERNAME: tracker
       SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
       JAVA_TOOL_OPTIONS: -Xmx384m
+      JWT_SECRET: ${JWT_SECRET}
     ports:
       - "8080:8080"
 
