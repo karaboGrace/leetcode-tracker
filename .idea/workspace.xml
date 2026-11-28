@@ -92,6 +92,7 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "Application.LeetCodeTrackerApplication.executor": "Run",
     "Application.TrackerGUI.executor": "Run",
     "JUnit.SM2SchedulerTest.executor": "Run",
     "Maven. [org.apache.maven.plugins:maven-archetype-plugin:RELEASE:generate].executor": "Run",
@@ -126,6 +127,16 @@
     ]
   }
 }]]></component>
+  <component name="RunManager">
+    <configuration name="LeetCodeTrackerApplication" type="Application" factoryName="Application">
+      <option name="MAIN_CLASS_NAME" value="tracker.LeetCodeTrackerApplication" />
+      <module name="leetcode-tracker" />
+      <option name="PROGRAM_PARAMETERS" value="--app.import-csv=$PROJECT_DIR$/data/cards.csv" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+  </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
